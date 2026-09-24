@@ -16,13 +16,18 @@ function urlBancoTeste(): string {
   return `postgresql://${usuario}:${senha}@localhost:${porta}/${banco}_test`;
 }
 
+const ambienteTeste = {
+  DATABASE_URL: urlBancoTeste(),
+  JWT_SECRET: 'segredo-de-teste',
+  TZ: 'America/Sao_Paulo',
+};
+// O globalSetup roda no processo principal: as variáveis também precisam estar nele.
+Object.assign(process.env, ambienteTeste);
+
 export default defineConfig({
   test: {
-    env: {
-      DATABASE_URL: urlBancoTeste(),
-      JWT_SECRET: 'segredo-de-teste',
-      TZ: 'America/Sao_Paulo',
-    },
+    env: ambienteTeste,
+    globalSetup: ['src/tests/globalSetup.ts'],
     fileParallelism: false,
     testTimeout: 30000,
     hookTimeout: 120000,
