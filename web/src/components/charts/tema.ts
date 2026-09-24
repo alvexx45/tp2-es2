@@ -1,10 +1,10 @@
 /** Cores e tipografia dos gráficos (paleta de referência validada; série única + status crítico). */
 export const TEMA = {
-  serie: '#2a78d6',
-  critico: '#d03b3b',
-  grade: '#e1e0d9',
-  eixo: '#c3c2b7',
-  textoEixo: '#898781',
+  serie: '#4f46e5',
+  critico: '#dc2626',
+  grade: '#eef0f4',
+  eixo: '#cbd5e1',
+  textoEixo: '#64748b',
   fonte: 12,
 };
 

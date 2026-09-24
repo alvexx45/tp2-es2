@@ -107,7 +107,7 @@ export function GraficoBarrasSerie({ serie, medida, agrupamento = 'dia' }: Props
             allowDecimals={false}
           />
           <Tooltip
-            cursor={{ fill: 'rgba(42,120,214,0.08)' }}
+            cursor={{ fill: 'rgba(79,70,229,0.08)' }}
             content={({ active, payload }) =>
               active && payload?.[0] ? (
                 <DicaSerie

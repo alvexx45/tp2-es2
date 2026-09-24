@@ -1,6 +1,6 @@
 /** Único ponto de acesso HTTP do front-end (Seção 3.1). Injeta o token e padroniza os erros. */
 
-const CHAVE_TOKEN = 'tempo-parado.token';
+const CHAVE_TOKEN = 'tauko.token';
 
 let tokenAtual: string | null = lerTokenSalvo();
 let aoExpirar: (() => void) | null = null;

@@ -1,4 +1,4 @@
-# Tempo Parado — Monitoramento de Tempo Parado em Roteiros (MVP)
+# Tauko — Monitoramento de Tempo Parado em Roteiros (MVP)
 
 Sistema web para empresas de logística acompanharem **onde** e **por quanto tempo** motoristas e motoboys
 ficam parados durante o roteiro diário. O gerente monta o roteiro, o motorista registra chegada e saída

@@ -1,5 +1,5 @@
 {
-  "name": "mvp-tempo-parado-web",
+  "name": "tauko-web",
   "version": "0.1.0",
   "private": true,
   "type": "module",
@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@tanstack/react-query": "^5.103.2",
+    "lucide-react": "^1.48.0",
     "react": "^19.3.0",
     "react-dom": "^19.3.0",
     "react-router": "^7.18.4",

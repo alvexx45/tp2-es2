@@ -54,7 +54,7 @@ export function GraficoParadasDia({ paradas }: { paradas: ParadaDashboard[] }) {
             }}
           />
           <Tooltip
-            cursor={{ fill: 'rgba(42,120,214,0.08)' }}
+            cursor={{ fill: 'rgba(79,70,229,0.08)' }}
             content={({ active, payload }) => {
               const p = active && payload?.[0]?.payload;
               if (!p) return null;

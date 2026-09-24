@@ -3,6 +3,7 @@ import { Navigate, useLocation, useNavigate } from 'react-router';
 import { ErroApi } from '../api/cliente.ts';
 import { useAuth } from '../auth/AuthContext.tsx';
 import { rotaInicial } from '../auth/rotas.ts';
+import { Marca } from '../components/Marca.tsx';
 
 export default function Login() {
   const { usuario, entrar } = useAuth();
@@ -32,9 +33,24 @@ export default function Login() {
 
   return (
     <div className="login">
-      <form className="cartao login-cartao" onSubmit={enviar}>
-        <h1>⏱️ Tempo Parado</h1>
-        <p className="texto-suave">Monitoramento de tempo parado em roteiros</p>
+      <aside className="login-painel" aria-hidden="true">
+        <Marca grande />
+        <div>
+          <p className="login-painel-titulo">Cada minuto parado, visível.</p>
+          <p className="login-painel-texto">
+            Registre chegadas e saídas pelo celular e acompanhe tempo parado, distância e custo de
+            cada roteiro em tempo real.
+          </p>
+        </div>
+      </aside>
+      <form className="login-cartao" onSubmit={enviar}>
+        <div className="login-marca-movel">
+          <Marca grande />
+        </div>
+        <div>
+          <h1>Entrar</h1>
+          <p className="texto-suave">Monitoramento de tempo parado em roteiros</p>
+        </div>
         <label>
           E-mail
           <input
