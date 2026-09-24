@@ -3,6 +3,10 @@ import { useAuth } from './auth/AuthContext.tsx';
 import { RotaProtegida } from './auth/RotaProtegida.tsx';
 import { rotaInicial } from './auth/rotas.ts';
 import { Layout } from './components/Layout.tsx';
+import Gerentes from './pages/admin/Gerentes.tsx';
+import Motoristas from './pages/gerente/Motoristas.tsx';
+import Pontos from './pages/gerente/Pontos.tsx';
+import Veiculos from './pages/gerente/Veiculos.tsx';
 import Login from './pages/Login.tsx';
 
 function Inicio() {
@@ -55,6 +59,38 @@ export default function App() {
           element={
             <RotaProtegida perfis={[...GESTAO]}>
               <EmConstrucao titulo="Dashboard" />
+            </RotaProtegida>
+          }
+        />
+        <Route
+          path="/pontos"
+          element={
+            <RotaProtegida perfis={[...GESTAO]}>
+              <Pontos />
+            </RotaProtegida>
+          }
+        />
+        <Route
+          path="/motoristas"
+          element={
+            <RotaProtegida perfis={[...GESTAO]}>
+              <Motoristas />
+            </RotaProtegida>
+          }
+        />
+        <Route
+          path="/veiculos"
+          element={
+            <RotaProtegida perfis={[...GESTAO]}>
+              <Veiculos />
+            </RotaProtegida>
+          }
+        />
+        <Route
+          path="/admin/gerentes"
+          element={
+            <RotaProtegida perfis={['ADMIN']}>
+              <Gerentes />
             </RotaProtegida>
           }
         />

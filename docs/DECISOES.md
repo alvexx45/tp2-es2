@@ -40,3 +40,16 @@ Formato: data · contexto · decisão · motivo.
 
 ## D06 — `prisma` (CLI) em `dependencies`
 - **Decisão:** o pacote `prisma` fica em `dependencies` porque o container executa `prisma migrate deploy` no start.
+
+## D07 — Regras de cadastro não detalhadas na especificação
+- **Gerentes:** `POST /gerentes` também cria o `Usuario` GERENTE (exige `senha`), como já acontece com motoristas.
+- **Usuários (`/usuarios`):** `POST` só cria usuários ADMIN (gerentes e motoristas nascem nos próprios cadastros).
+  No `PATCH`, o perfil precisa ser compatível com o vínculo: usuário de motorista é sempre MOTORISTA; de gerente,
+  GERENTE ou ADMIN. O admin não pode desativar nem rebaixar o próprio usuário.
+- **Motoristas:** o gerente só cadastra na própria equipe; o admin informa `gerenteId` e é o único que transfere de equipe.
+  Inativar motorista/gerente também desativa o usuário. O middleware `autenticar` confere no banco se o usuário
+  continua ativo, então a inativação corta o acesso na hora (sem esperar o JWT expirar).
+- **Veículos** não têm escopo por equipe (frota compartilhada) e também são auditados, embora a Seção 11 não exija.
+- **Ids inválidos** na URL respondem 404 (como recurso inexistente).
+- **Validação:** erros do Zod respondem 422 com código `DADOS_INVALIDOS` e a lista de campos em `detalhes.campos`;
+  violação de unicidade responde 409 `REGISTRO_DUPLICADO`.
