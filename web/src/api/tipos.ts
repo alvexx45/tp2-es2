@@ -68,3 +68,74 @@ export interface Usuario {
   nome: string | null;
   vinculo: 'MOTORISTA' | 'GERENTE' | null;
 }
+
+export type StatusRoteiro = 'PLANEJADO' | 'EM_ANDAMENTO' | 'FINALIZADO' | 'CANCELADO';
+
+export interface Parada {
+  id: string;
+  ordem: number;
+  ponto: {
+    id: string;
+    endereco: string;
+    descricao: string | null;
+    latitude: number;
+    longitude: number;
+  };
+  codigoPedido: string | null;
+  chegadaEm: string | null;
+  saidaEm: string | null;
+  tempoParadoMin: number | null;
+  alerta: boolean;
+}
+
+export interface Roteiro {
+  id: string;
+  data: string;
+  status: StatusRoteiro;
+  motorista: { id: string; nome: string };
+  gerente: { id: string; nome: string };
+  veiculo: {
+    id: string;
+    placa: string;
+    modelo: string;
+    tipo: TipoVeiculo;
+    kmPorLitro: number;
+  } | null;
+  kmInformado: number | null;
+  distanciaTotalKm: number | null;
+  tempoTotalParadoMin: number;
+  custoEstimado: number | null;
+  custoPorKm: number | null;
+  percentualJornada: number | null;
+  finalizadoEm: string | null;
+  limiteAlertaParadaMin: number;
+  jornadaPadraoHoras: number;
+  paradas: Parada[];
+}
+
+export interface RoteiroResumo {
+  id: string;
+  data: string;
+  status: StatusRoteiro;
+  motorista: { id: string; nome: string };
+  veiculo: { id: string; placa: string; modelo: string } | null;
+  totalParadas: number;
+  paradasConcluidas: number;
+  tempoTotalParadoMin: number;
+  distanciaTotalKm: number | null;
+  custoEstimado: number | null;
+  percentualJornada: number | null;
+}
+
+export interface ParadaEntrada {
+  pontoId: string;
+  ordem: number;
+  codigoPedido?: string | null;
+}
+
+export interface DadosRoteiro {
+  data: string;
+  motoristaId: string;
+  veiculoId?: string | null;
+  paradas: ParadaEntrada[];
+}
