@@ -6,6 +6,7 @@ import { RotaProtegida } from './auth/RotaProtegida.tsx';
 import { rotaInicial } from './auth/rotas.ts';
 import { Layout } from './components/Layout.tsx';
 import Gerentes from './pages/admin/Gerentes.tsx';
+import HistoricoPage from './pages/gerente/HistoricoPage.tsx';
 import Motoristas from './pages/gerente/Motoristas.tsx';
 import ParametrosPage from './pages/gerente/ParametrosPage.tsx';
 import Pontos from './pages/gerente/Pontos.tsx';
@@ -44,6 +45,7 @@ const ROTAS: { caminho: string; perfis: Perfil[]; tela: ReactNode }[] = [
     tela: <HistoricoMotorista />,
   },
   { caminho: '/dashboard', perfis: GESTAO, tela: <EmConstrucao titulo="Dashboard" /> },
+  { caminho: '/historico', perfis: GESTAO, tela: <HistoricoPage /> },
   { caminho: '/roteiros', perfis: GESTAO, tela: <Roteiros /> },
   { caminho: '/roteiros/:id', perfis: GESTAO, tela: <RoteiroDetalhe /> },
   { caminho: '/pontos', perfis: GESTAO, tela: <Pontos /> },

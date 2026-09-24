@@ -69,3 +69,10 @@ Formato: data · contexto · decisão · motivo.
 - **Correção de horário:** permitida em qualquer status exceto `CANCELADO`; em roteiro `FINALIZADO` continua valendo
   V10 (não dá para apagar um horário obrigatório) e distância/custo/% são recalculados com o mesmo snapshot.
 - **`gerenteId` do roteiro** = gerente da equipe do motorista (inclusive quando o admin monta o roteiro).
+
+## D09 — Histórico e CSV
+- `GET /historico` e o CSV consideram roteiros `EM_ANDAMENTO` e `FINALIZADO` (como o dashboard). Sem `inicio`/`fim`,
+  o período padrão são os últimos 30 dias. A `busca` procura no endereço, na descrição do ponto e no código do pedido.
+- No CSV, datas vão como `dd/mm/aaaa` e horários como `dd/mm/aaaa hh:mm` (fuso de São Paulo) para o Excel
+  reconhecer; campos com `;`, aspas ou quebra de linha são colocados entre aspas. Limite de 200 mil linhas por arquivo.
+- O alerta de cada parada usa o `limiteAlertaParadaMin` do snapshot do roteiro (ou o vigente, se ainda não finalizado).

@@ -152,3 +152,18 @@ export interface Parametros {
   limiteAlertaParadaMin: number;
   criadoPorId: string | null;
 }
+
+export interface ItemHistorico {
+  paradaId: string;
+  roteiroId: string;
+  data: string;
+  motoristaId: string;
+  motorista: string;
+  ordem: number;
+  endereco: string;
+  codigoPedido: string | null;
+  chegadaEm: string | null;
+  saidaEm: string | null;
+  tempoParadoMin: number | null;
+  alerta: boolean;
+}

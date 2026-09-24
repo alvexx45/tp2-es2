@@ -4,13 +4,8 @@ import { MensagemErro } from '../../components/MensagemErro.tsx';
 import { Paginacao } from '../../components/Paginacao.tsx';
 import { ResumoRoteiro } from '../../components/ResumoRoteiro.tsx';
 import { SeloAlerta, SeloStatus } from '../../components/StatusRoteiro.tsx';
+import { somarDias } from '../../lib/datas.ts';
 import { formatarData, formatarDuracao, formatarHora, hoje } from '../../lib/formatos.ts';
-
-function somarDias(data: string, dias: number) {
-  const d = new Date(`${data}T12:00:00Z`);
-  d.setUTCDate(d.getUTCDate() + dias);
-  return d.toISOString().slice(0, 10);
-}
 
 function DetalheRoteiro({ id }: { id: string }) {
   const consulta = useRoteiro(id);
