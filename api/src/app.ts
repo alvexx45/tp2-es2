@@ -2,6 +2,7 @@ import express from 'express';
 import { env } from './config/env.ts';
 import { cors } from './middlewares/cors.ts';
 import { errorHandler, rotaNaoEncontrada } from './middlewares/errorHandler.ts';
+import { auditoriaRoutes } from './modules/auditoria/auditoria.routes.ts';
 import { authRoutes } from './modules/auth/auth.routes.ts';
 import { dashboardRoutes } from './modules/dashboard/dashboard.routes.ts';
 import { gerentesRoutes } from './modules/gerentes/gerentes.routes.ts';
@@ -34,6 +35,7 @@ export function criarApp() {
   api.use('/parametros', parametrosRoutes);
   api.use('/historico', historicoRoutes);
   api.use('/dashboard', dashboardRoutes);
+  api.use('/auditoria', auditoriaRoutes);
   app.use('/api', api);
 
   app.use('/api', rotaNaoEncontrada);

@@ -156,5 +156,5 @@ export async function exportarCsv(u: UsuarioAutenticado, f: FiltrosHistorico): P
       .map(celula)
       .join(';');
   });
-  return `﻿${[cabecalho, ...corpo].join('\r\n')}\r\n`;
+  return `\uFEFF${[cabecalho, ...corpo].join('\r\n')}\r\n`;
 }

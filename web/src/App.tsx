@@ -5,7 +5,9 @@ import { useAuth } from './auth/AuthContext.tsx';
 import { RotaProtegida } from './auth/RotaProtegida.tsx';
 import { rotaInicial } from './auth/rotas.ts';
 import { Layout } from './components/Layout.tsx';
+import Auditoria from './pages/admin/Auditoria.tsx';
 import Gerentes from './pages/admin/Gerentes.tsx';
+import Usuarios from './pages/admin/Usuarios.tsx';
 import HistoricoPage from './pages/gerente/HistoricoPage.tsx';
 import Motoristas from './pages/gerente/Motoristas.tsx';
 import ParametrosPage from './pages/gerente/ParametrosPage.tsx';
@@ -55,6 +57,8 @@ const ROTAS: { caminho: string; perfis: Perfil[]; tela: ReactNode }[] = [
   { caminho: '/veiculos', perfis: GESTAO, tela: <Veiculos /> },
   { caminho: '/parametros', perfis: GESTAO, tela: <ParametrosPage /> },
   { caminho: '/admin/gerentes', perfis: ADMIN, tela: <Gerentes /> },
+  { caminho: '/admin/usuarios', perfis: ADMIN, tela: <Usuarios /> },
+  { caminho: '/admin/auditoria', perfis: ADMIN, tela: <Auditoria /> },
 ];
 
 export default function App() {

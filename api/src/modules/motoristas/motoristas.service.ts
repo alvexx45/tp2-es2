@@ -6,7 +6,7 @@ import { escopoMotoristas } from '../../lib/escopo.ts';
 import { pagina, paginar, type Paginacao } from '../../lib/paginacao.ts';
 import { mascararDocumento, num } from '../../lib/serializar.ts';
 import type { UsuarioAutenticado } from '../../lib/tipos.ts';
-import { registrar } from '../auditoria/auditoria.service.ts';
+import { anonimizarRegistros, registrar } from '../auditoria/auditoria.service.ts';
 
 export interface DadosMotorista {
   nome: string;
@@ -244,12 +244,14 @@ export async function anonimizar(id: string, u: UsuarioAutenticado) {
         data: { ativo: false, email: `anonimizado-${m.usuarioId}@anonimizado.invalid` },
       });
     }
+    await anonimizarRegistros(tx, 'Motorista', id);
+    if (m.usuarioId) await anonimizarRegistros(tx, 'Usuario', m.usuarioId);
     await registrar(tx, {
       entidade: 'Motorista',
       entidadeId: id,
       acao: 'ALTERACAO',
       valorAnterior: {
-        nome: '(dado pessoal removido)',
+        nome: '(anonimizado)',
         anonimizado: anterior.anonimizado,
         ativo: anterior.ativo,
       },

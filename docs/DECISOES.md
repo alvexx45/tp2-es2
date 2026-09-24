@@ -76,3 +76,12 @@ Formato: data · contexto · decisão · motivo.
 - No CSV, datas vão como `dd/mm/aaaa` e horários como `dd/mm/aaaa hh:mm` (fuso de São Paulo) para o Excel
   reconhecer; campos com `;`, aspas ou quebra de linha são colocados entre aspas. Limite de 200 mil linhas por arquivo.
 - O alerta de cada parada usa o `limiteAlertaParadaMin` do snapshot do roteiro (ou o vigente, se ainda não finalizado).
+
+## D10 — Auditoria e LGPD
+- **Anonimização:** além do que pede a Seção 11, o e-mail de login do motorista também é trocado por um identificador
+  técnico (`anonimizado-<id>@anonimizado.invalid`), e os valores `nome`, `telefone`, `documento` e `email` já gravados
+  nos logs de auditoria daquele motorista e do usuário dele passam a `"(anonimizado)"`. O log continua registrando
+  quem fez cada alteração e quando; só o dado pessoal sai. Sem isso a anonimização seria ineficaz (o nome ficaria
+  recuperável pela tela de auditoria).
+- **`GET /auditoria`:** aceita também `usuarioId` e pagina (`pagina`, `tamanho`); `inicio`/`fim` são datas locais
+  inclusivas.

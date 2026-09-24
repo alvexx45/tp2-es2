@@ -243,3 +243,14 @@ export interface DashboardPeriodo {
   serie: PontoSerie[];
   ranking: ItemRanking[];
 }
+
+export interface LogAuditoria {
+  id: string;
+  entidade: string;
+  entidadeId: string;
+  acao: 'CRIACAO' | 'ALTERACAO' | 'EXCLUSAO';
+  valorAnterior: unknown;
+  valorNovo: unknown;
+  dataHora: string;
+  usuario: { id: string; email: string; perfil: Perfil };
+}
