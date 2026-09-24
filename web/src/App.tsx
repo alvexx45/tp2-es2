@@ -12,6 +12,8 @@ import RoteiroDetalhe from './pages/gerente/RoteiroDetalhe.tsx';
 import Roteiros from './pages/gerente/Roteiros.tsx';
 import Veiculos from './pages/gerente/Veiculos.tsx';
 import Login from './pages/Login.tsx';
+import HistoricoMotorista from './pages/motorista/Historico.tsx';
+import Hoje from './pages/motorista/Hoje.tsx';
 
 function Inicio() {
   const { usuario, carregando } = useAuth();
@@ -34,11 +36,11 @@ const ADMIN: Perfil[] = ['ADMIN'];
 
 /** Rotas da Seção 10 com o perfil exigido em cada uma. */
 const ROTAS: { caminho: string; perfis: Perfil[]; tela: ReactNode }[] = [
-  { caminho: '/motorista', perfis: MOTORISTA, tela: <EmConstrucao titulo="Roteiro de hoje" /> },
+  { caminho: '/motorista', perfis: MOTORISTA, tela: <Hoje /> },
   {
     caminho: '/motorista/historico',
     perfis: MOTORISTA,
-    tela: <EmConstrucao titulo="Meus roteiros" />,
+    tela: <HistoricoMotorista />,
   },
   { caminho: '/dashboard', perfis: GESTAO, tela: <EmConstrucao titulo="Dashboard" /> },
   { caminho: '/roteiros', perfis: GESTAO, tela: <Roteiros /> },

@@ -53,3 +53,19 @@ Formato: data · contexto · decisão · motivo.
 - **Ids inválidos** na URL respondem 404 (como recurso inexistente).
 - **Validação:** erros do Zod respondem 422 com código `DADOS_INVALIDOS` e a lista de campos em `detalhes.campos`;
   violação de unicidade responde 409 `REGISTRO_DUPLICADO`.
+
+## D08 — Detalhes do módulo de roteiros
+- **`GET /roteiros/meus`:** com `?data=` (padrão hoje) responde `{ roteiro: <roteiro completo> | null }`, usado pela
+  tela "Roteiro de hoje". Com `?inicio=&fim=` responde a lista paginada de resumos (tela "Meus roteiros", UC11).
+  Roteiros cancelados não aparecem para o motorista.
+- **Tempo mínimo antes da finalização:** enquanto o roteiro está aberto, o tempo parado usa a versão *vigente* de
+  parâmetros; ao finalizar, todas as paradas são recalculadas com a versão gravada como snapshot (`parametroId`).
+- **Registro duplicado:** o motorista não sobrescreve um horário já registrado (`SEQUENCIA_INVALIDA`);
+  quem corrige é o gerente/admin (`PATCH .../paradas/:id`). A gravação usa `updateMany ... where campo IS NULL`
+  para não aceitar dois toques simultâneos.
+- **Localização do registro:** `latRegistro/longRegistro` guardam a posição do primeiro registro da parada
+  (chegada; na partida, a saída).
+- **Cancelamento:** só de roteiros `PLANEJADO` (ciclo de vida da Seção 6.8); senão `ROTEIRO_EM_ANDAMENTO`.
+- **Correção de horário:** permitida em qualquer status exceto `CANCELADO`; em roteiro `FINALIZADO` continua valendo
+  V10 (não dá para apagar um horário obrigatório) e distância/custo/% são recalculados com o mesmo snapshot.
+- **`gerenteId` do roteiro** = gerente da equipe do motorista (inclusive quando o admin monta o roteiro).
