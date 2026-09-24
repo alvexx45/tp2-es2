@@ -1,0 +1,193 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Perfil {
+  MOTORISTA
+  GERENTE
+  ADMIN
+}
+
+enum CargoGestor {
+  GERENTE
+  COORDENADOR
+  DONO
+}
+
+enum TipoVeiculo {
+  MOTO
+  CARRO
+  VAN
+  CAMINHAO
+}
+
+enum StatusRoteiro {
+  PLANEJADO
+  EM_ANDAMENTO
+  FINALIZADO
+  CANCELADO
+}
+
+enum AcaoAuditoria {
+  CRIACAO
+  ALTERACAO
+  EXCLUSAO
+}
+
+model Usuario {
+  id        String         @id @default(uuid()) @db.Uuid
+  email     String         @unique
+  senhaHash String         @map("senha_hash")
+  perfil    Perfil
+  ativo     Boolean        @default(true)
+  criadoEm  DateTime       @default(now()) @map("criado_em") @db.Timestamptz(3)
+  motorista Motorista?
+  gerente   Gerente?
+  logs      LogAuditoria[]
+
+  @@map("usuarios")
+}
+
+model Gerente {
+  id        String      @id @default(uuid()) @db.Uuid
+  nome      String
+  telefone  String
+  email     String      @unique
+  cargo     CargoGestor @default(GERENTE)
+  ativo     Boolean     @default(true)
+  usuarioId String?     @unique @map("usuario_id") @db.Uuid
+  usuario   Usuario?    @relation(fields: [usuarioId], references: [id])
+  equipe    Motorista[]
+  roteiros  Roteiro[]
+
+  @@map("gerentes")
+}
+
+model Motorista {
+  id          String    @id @default(uuid()) @db.Uuid
+  nome        String
+  telefone    String?
+  documento   String?   @unique
+  ativo       Boolean   @default(true)
+  anonimizado Boolean   @default(false)
+  gerenteId   String    @map("gerente_id") @db.Uuid
+  gerente     Gerente   @relation(fields: [gerenteId], references: [id])
+  veiculoId   String?   @map("veiculo_id") @db.Uuid
+  veiculo     Veiculo?  @relation(fields: [veiculoId], references: [id])
+  usuarioId   String?   @unique @map("usuario_id") @db.Uuid
+  usuario     Usuario?  @relation(fields: [usuarioId], references: [id])
+  roteiros    Roteiro[]
+
+  @@index([gerenteId])
+  @@map("motoristas")
+}
+
+model Veiculo {
+  id         String      @id @default(uuid()) @db.Uuid
+  placa      String      @unique
+  modelo     String
+  tipo       TipoVeiculo
+  kmPorLitro Decimal     @map("km_por_litro") @db.Decimal(6, 2)
+  ativo      Boolean     @default(true)
+  motoristas Motorista[]
+  roteiros   Roteiro[]
+
+  @@map("veiculos")
+}
+
+model Ponto {
+  id        String         @id @default(uuid()) @db.Uuid
+  descricao String?
+  endereco  String
+  latitude  Decimal        @db.Decimal(9, 6)
+  longitude Decimal        @db.Decimal(9, 6)
+  ativo     Boolean        @default(true)
+  criadoEm  DateTime       @default(now()) @map("criado_em") @db.Timestamptz(3)
+  paradas   PontoRoteiro[]
+
+  @@index([endereco])
+  @@map("pontos")
+}
+
+model Roteiro {
+  id                  String            @id @default(uuid()) @db.Uuid
+  data                DateTime          @db.Date
+  status              StatusRoteiro     @default(PLANEJADO)
+  motoristaId         String            @map("motorista_id") @db.Uuid
+  motorista           Motorista         @relation(fields: [motoristaId], references: [id])
+  gerenteId           String            @map("gerente_id") @db.Uuid
+  gerente             Gerente           @relation(fields: [gerenteId], references: [id])
+  veiculoId           String?           @map("veiculo_id") @db.Uuid
+  veiculo             Veiculo?          @relation(fields: [veiculoId], references: [id])
+  parametroId         String?           @map("parametro_id") @db.Uuid
+  parametro           ParametroSistema? @relation(fields: [parametroId], references: [id])
+  kmInformado         Decimal?          @map("km_informado") @db.Decimal(8, 2)
+  distanciaTotalKm    Decimal?          @map("distancia_total_km") @db.Decimal(8, 2)
+  tempoTotalParadoMin Int               @default(0) @map("tempo_total_parado_min")
+  custoEstimado       Decimal?          @map("custo_estimado") @db.Decimal(10, 2)
+  percentualJornada   Decimal?          @map("percentual_jornada") @db.Decimal(5, 2)
+  finalizadoEm        DateTime?         @map("finalizado_em") @db.Timestamptz(3)
+  criadoEm            DateTime          @default(now()) @map("criado_em") @db.Timestamptz(3)
+  pontos              PontoRoteiro[]
+
+  @@index([data])
+  @@index([motoristaId, data])
+  @@map("roteiros")
+}
+
+model PontoRoteiro {
+  id             String    @id @default(uuid()) @db.Uuid
+  roteiroId      String    @map("roteiro_id") @db.Uuid
+  roteiro        Roteiro   @relation(fields: [roteiroId], references: [id], onDelete: Cascade)
+  pontoId        String    @map("ponto_id") @db.Uuid
+  ponto          Ponto     @relation(fields: [pontoId], references: [id])
+  ordem          Int
+  codigoPedido   String?   @map("codigo_pedido")
+  chegadaEm      DateTime? @map("chegada_em") @db.Timestamptz(3)
+  saidaEm        DateTime? @map("saida_em") @db.Timestamptz(3)
+  tempoParadoMin Int?      @map("tempo_parado_min")
+  latRegistro    Decimal?  @map("lat_registro") @db.Decimal(9, 6)
+  longRegistro   Decimal?  @map("long_registro") @db.Decimal(9, 6)
+
+  @@unique([roteiroId, ordem])
+  @@index([pontoId])
+  @@map("pontos_roteiro")
+}
+
+model ParametroSistema {
+  id                    String    @id @default(uuid()) @db.Uuid
+  vigenteDesde          DateTime  @default(now()) @map("vigente_desde") @db.Timestamptz(3)
+  valorCombustivelLitro Decimal   @map("valor_combustivel_litro") @db.Decimal(8, 3)
+  kmPorLitroPadrao      Decimal   @map("km_por_litro_padrao") @db.Decimal(6, 2)
+  custoOperacionalPorKm Decimal   @default(0) @map("custo_operacional_por_km") @db.Decimal(8, 3)
+  fatorCorrecaoRota     Decimal   @default(1.3) @map("fator_correcao_rota") @db.Decimal(4, 2)
+  jornadaPadraoHoras    Decimal   @default(8) @map("jornada_padrao_horas") @db.Decimal(4, 2)
+  tempoMinimoParadaMin  Int       @default(0) @map("tempo_minimo_parada_min")
+  limiteAlertaParadaMin Int       @default(60) @map("limite_alerta_parada_min")
+  criadoPorId           String?   @map("criado_por_id") @db.Uuid
+  roteiros              Roteiro[]
+
+  @@index([vigenteDesde])
+  @@map("parametros_sistema")
+}
+
+model LogAuditoria {
+  id            String        @id @default(uuid()) @db.Uuid
+  entidade      String
+  entidadeId    String        @map("entidade_id") @db.Uuid
+  acao          AcaoAuditoria
+  valorAnterior Json?         @map("valor_anterior")
+  valorNovo     Json?         @map("valor_novo")
+  usuarioId     String        @map("usuario_id") @db.Uuid
+  usuario       Usuario       @relation(fields: [usuarioId], references: [id])
+  dataHora      DateTime      @default(now()) @map("data_hora") @db.Timestamptz(3)
+
+  @@index([entidade, entidadeId])
+  @@index([dataHora])
+  @@map("logs_auditoria")
+}
