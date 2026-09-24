@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react';
+import { lazy, Suspense, type ReactNode } from 'react';
 import { Navigate, Route, Routes } from 'react-router';
 import type { Perfil } from './api/tipos.ts';
 import { useAuth } from './auth/AuthContext.tsx';
@@ -23,14 +23,8 @@ function Inicio() {
   return <Navigate to={usuario ? rotaInicial(usuario.perfil) : '/login'} replace />;
 }
 
-function EmConstrucao({ titulo }: { titulo: string }) {
-  return (
-    <section>
-      <h1>{titulo}</h1>
-      <p className="texto-suave">Tela em construção.</p>
-    </section>
-  );
-}
+// O dashboard carrega o Recharts: fica num chunk separado, baixado só quando a tela é aberta.
+const Dashboard = lazy(() => import('./pages/gerente/Dashboard.tsx'));
 
 const MOTORISTA: Perfil[] = ['MOTORISTA'];
 const GESTAO: Perfil[] = ['GERENTE', 'ADMIN'];
@@ -44,7 +38,15 @@ const ROTAS: { caminho: string; perfis: Perfil[]; tela: ReactNode }[] = [
     perfis: MOTORISTA,
     tela: <HistoricoMotorista />,
   },
-  { caminho: '/dashboard', perfis: GESTAO, tela: <EmConstrucao titulo="Dashboard" /> },
+  {
+    caminho: '/dashboard',
+    perfis: GESTAO,
+    tela: (
+      <Suspense fallback={<p className="carregando">Carregando…</p>}>
+        <Dashboard />
+      </Suspense>
+    ),
+  },
   { caminho: '/historico', perfis: GESTAO, tela: <HistoricoPage /> },
   { caminho: '/roteiros', perfis: GESTAO, tela: <Roteiros /> },
   { caminho: '/roteiros/:id', perfis: GESTAO, tela: <RoteiroDetalhe /> },

@@ -167,3 +167,79 @@ export interface ItemHistorico {
   tempoParadoMin: number | null;
   alerta: boolean;
 }
+
+export interface CardsDashboard {
+  tempoTotalParadoMin: number;
+  percentualJornada: number;
+  paradas: number;
+  alertas: number;
+  roteiros: number;
+  distanciaKm: number | null;
+  custoEstimado: number | null;
+}
+
+export interface ParadaDashboard {
+  roteiroId: string;
+  motoristaId: string;
+  motorista: string;
+  paradaId: string;
+  ordem: number;
+  endereco: string;
+  codigoPedido: string | null;
+  chegadaEm: string;
+  saidaEm: string;
+  tempoParadoMin: number;
+  alerta: boolean;
+}
+
+export interface PontoSerie {
+  data: string;
+  tempoParadoMin: number;
+  roteiros: number;
+  paradas: number;
+  alertas: number;
+  percentualJornada: number;
+  maiorParada: {
+    endereco: string;
+    motorista: string;
+    chegadaEm: string;
+    saidaEm: string;
+    tempoParadoMin: number;
+  } | null;
+}
+
+export interface ItemRanking {
+  pontoId: string;
+  endereco: string;
+  tempoMedioMin: number;
+  visitas: number;
+  tempoTotalMin: number;
+  ultimaVisitaEm: string;
+}
+
+export interface DashboardDia {
+  recorte: 'dia';
+  data: string;
+  cards: CardsDashboard;
+  paradas: ParadaDashboard[];
+}
+
+export interface DashboardMes {
+  recorte: 'mes';
+  ano: number;
+  mes: number;
+  inicio: string;
+  fim: string;
+  cards: CardsDashboard;
+  serie: PontoSerie[];
+}
+
+export interface DashboardPeriodo {
+  recorte: 'periodo';
+  inicio: string;
+  fim: string;
+  agrupamento: 'dia' | 'mes';
+  cards: CardsDashboard;
+  serie: PontoSerie[];
+  ranking: ItemRanking[];
+}

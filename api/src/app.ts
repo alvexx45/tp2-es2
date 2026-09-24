@@ -3,6 +3,7 @@ import { env } from './config/env.ts';
 import { cors } from './middlewares/cors.ts';
 import { errorHandler, rotaNaoEncontrada } from './middlewares/errorHandler.ts';
 import { authRoutes } from './modules/auth/auth.routes.ts';
+import { dashboardRoutes } from './modules/dashboard/dashboard.routes.ts';
 import { gerentesRoutes } from './modules/gerentes/gerentes.routes.ts';
 import { historicoRoutes } from './modules/historico/historico.routes.ts';
 import { motoristasRoutes } from './modules/motoristas/motoristas.routes.ts';
@@ -32,6 +33,7 @@ export function criarApp() {
   api.use('/roteiros', roteirosRoutes);
   api.use('/parametros', parametrosRoutes);
   api.use('/historico', historicoRoutes);
+  api.use('/dashboard', dashboardRoutes);
   app.use('/api', api);
 
   app.use('/api', rotaNaoEncontrada);
