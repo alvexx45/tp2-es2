@@ -25,3 +25,18 @@ Formato: data · contexto · decisão · motivo.
 - **Decisão:** middleware próprio de CORS que aceita apenas as origens em `CORS_ORIGIN`
   (lista separada por vírgula; padrão `http://localhost:8080,http://localhost:5173`).
 - **Motivo:** Seção 11 exige CORS restrito; o pacote `cors` não está na Seção 2.
+
+## D05 — Lógica do seed em `api/src/seed/`
+- **Decisão:** `prisma/seed.ts` é só um ponto de entrada; a lógica fica em `src/seed/` (`seed.ts`, `carga.ts`,
+  `gerador.ts`) para ser compilada junto com a API (`dist/seed/executar.js`) e rodar no container sem ferramentas
+  de desenvolvimento. O seed reutiliza as funções puras de `src/domain/` para calcular tempo parado, distância e custo
+  (por isso foi commitado depois da etapa 3).
+- **Idempotência:** o seed não faz nada se o usuário `admin@mvp.local` já existe; o `seed:carga` não faz nada se
+  `carga01@mvp.local` já existe.
+- **Dados:** além dos pontos P1–P4 da Seção 12, o seed cria 10 endereços fictícios extras em BH para o histórico
+  aleatório ter variedade (ranking de endereços). A primeira versão de `ParametroSistema` vale desde hoje − 120 dias
+  para cobrir o histórico. Os roteiros A/B/C usam deslocamentos de 15–30 min entre paradas (a Seção 12 só fixa os
+  tempos parados; os horários do roteiro A seguem a tabela 6.6).
+
+## D06 — `prisma` (CLI) em `dependencies`
+- **Decisão:** o pacote `prisma` fica em `dependencies` porque o container executa `prisma migrate deploy` no start.
