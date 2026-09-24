@@ -5,6 +5,7 @@ import { errorHandler, rotaNaoEncontrada } from './middlewares/errorHandler.ts';
 import { authRoutes } from './modules/auth/auth.routes.ts';
 import { gerentesRoutes } from './modules/gerentes/gerentes.routes.ts';
 import { motoristasRoutes } from './modules/motoristas/motoristas.routes.ts';
+import { parametrosRoutes } from './modules/parametros/parametros.routes.ts';
 import { pontosRoutes } from './modules/pontos/pontos.routes.ts';
 import { roteirosRoutes } from './modules/roteiros/roteiros.routes.ts';
 import { usuariosRoutes } from './modules/usuarios/usuarios.routes.ts';
@@ -28,6 +29,7 @@ export function criarApp() {
   api.use('/veiculos', veiculosRoutes);
   api.use('/pontos', pontosRoutes);
   api.use('/roteiros', roteirosRoutes);
+  api.use('/parametros', parametrosRoutes);
   app.use('/api', api);
 
   app.use('/api', rotaNaoEncontrada);

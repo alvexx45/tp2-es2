@@ -2,6 +2,7 @@ import type { ParametroSistema, Prisma } from '@prisma/client';
 import { prisma } from '../../db/prisma.ts';
 import { ErroRegra } from '../../lib/erros.ts';
 import { num } from '../../lib/serializar.ts';
+import { registrar } from '../auditoria/auditoria.service.ts';
 
 type Cliente = Prisma.TransactionClient | typeof prisma;
 
@@ -42,4 +43,57 @@ export function serializarParametro(p: ParametroSistema) {
     limiteAlertaParadaMin: p.limiteAlertaParadaMin,
     criadoPorId: p.criadoPorId,
   };
+}
+
+export interface DadosCustos {
+  valorCombustivelLitro?: number;
+  kmPorLitroPadrao?: number;
+  custoOperacionalPorKm?: number;
+  fatorCorrecaoRota?: number;
+}
+
+export interface DadosJornada {
+  jornadaPadraoHoras?: number;
+  tempoMinimoParadaMin?: number;
+  limiteAlertaParadaMin?: number;
+}
+
+export async function listar(filtros: { pagina: number; tamanho: number }) {
+  const [itens, total] = await Promise.all([
+    prisma.parametroSistema.findMany({
+      orderBy: { vigenteDesde: 'desc' },
+      skip: (filtros.pagina - 1) * filtros.tamanho,
+      take: filtros.tamanho,
+    }),
+    prisma.parametroSistema.count(),
+  ]);
+  return {
+    itens: itens.map(serializarParametro),
+    total,
+    pagina: filtros.pagina,
+    tamanho: filtros.tamanho,
+  };
+}
+
+/**
+ * Cria uma nova versão copiando da vigente os campos não enviados (Seção 8). Versões antigas nunca mudam:
+ * roteiros finalizados continuam apontando para o snapshot com que foram calculados.
+ */
+export async function novaVersao(dados: DadosCustos & DadosJornada, usuarioId: string) {
+  return prisma.$transaction(async (tx) => {
+    const atual = await vigente(tx);
+    const { id: _id, vigenteDesde: _v, criadoPorId: _c, ...campos } = atual;
+    const nova = await tx.parametroSistema.create({
+      data: { ...campos, ...dados, vigenteDesde: new Date(), criadoPorId: usuarioId },
+    });
+    await registrar(tx, {
+      entidade: 'ParametroSistema',
+      entidadeId: nova.id,
+      acao: 'CRIACAO',
+      valorAnterior: serializarParametro(atual),
+      valorNovo: serializarParametro(nova),
+      usuarioId,
+    });
+    return serializarParametro(nova);
+  });
 }

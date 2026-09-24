@@ -139,3 +139,16 @@ export interface DadosRoteiro {
   veiculoId?: string | null;
   paradas: ParadaEntrada[];
 }
+
+export interface Parametros {
+  id: string;
+  vigenteDesde: string;
+  valorCombustivelLitro: number;
+  kmPorLitroPadrao: number;
+  custoOperacionalPorKm: number;
+  fatorCorrecaoRota: number;
+  jornadaPadraoHoras: number;
+  tempoMinimoParadaMin: number;
+  limiteAlertaParadaMin: number;
+  criadoPorId: string | null;
+}
