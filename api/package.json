@@ -17,7 +17,8 @@
     "seed": "node --env-file-if-exists=.env prisma/seed.ts",
     "seed:carga": "node --env-file-if-exists=.env src/seed/executarCarga.ts",
     "migrate:dev": "prisma migrate dev",
-    "migrate:deploy": "prisma migrate deploy"
+    "migrate:deploy": "prisma migrate deploy",
+    "test:carga": "TESTE_CARGA=1 vitest run src/tests/carga --reporter=verbose"
   },
   "dependencies": {
     "@prisma/client": "^6.19.3",

@@ -25,8 +25,11 @@ function Diferencas({ log }: { log: LogAuditoria }) {
   const chaves = [...new Set([...Object.keys(antes), ...Object.keys(depois)])].filter(
     (k) => JSON.stringify(antes[k]) !== JSON.stringify(depois[k]),
   );
-  const texto = (v: unknown) =>
-    v === undefined || v === null ? '—' : typeof v === 'object' ? JSON.stringify(v) : String(v);
+  const texto = (v: unknown) => {
+    if (v === undefined || v === null) return '—';
+    if (typeof v === 'string' && /^\d{4}-\d{2}-\d{2}T/.test(v)) return formatarDataHora(v);
+    return typeof v === 'object' ? JSON.stringify(v) : String(v);
+  };
   if (chaves.length === 0) return <span className="texto-suave">sem diferenças</span>;
   return (
     <ul className="lista-simples" style={{ fontSize: '0.82rem' }}>
