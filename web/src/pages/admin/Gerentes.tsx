@@ -1,3 +1,4 @@
+import { Plus } from 'lucide-react';
 import { useState, type FormEvent } from 'react';
 import { gerentesApi } from '../../api/cadastros.ts';
 import type { CargoGestor, Gerente } from '../../api/tipos.ts';
@@ -101,8 +102,13 @@ export default function Gerentes() {
     <section>
       <div className="cabecalho-pagina">
         <h1>Gerentes e coordenadores</h1>
-        <button type="button" className="botao botao-primario" onClick={() => setEditando('novo')}>
-          + Novo gerente
+        <button
+          type="button"
+          className="botao botao-primario botao-fab"
+          onClick={() => setEditando('novo')}
+        >
+          <Plus size={20} aria-hidden="true" />
+          Novo gerente
         </button>
       </div>
       <MensagemErro erro={lista.error ?? inativar.error} />

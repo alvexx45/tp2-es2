@@ -24,8 +24,11 @@
   --sombra-elevada: 0 10px 30px -10px rgba(15, 23, 42, 0.18), 0 4px 10px -6px rgba(15, 23, 42, 0.1);
   --anel-foco: 0 0 0 4px rgba(79, 70, 229, 0.18);
   --transicao: 150ms ease;
-  --altura-topo: 60px;
-  --altura-menu-inferior: 64px;
+  --altura-topo: 64px;
+  --altura-menu-inferior: 68px;
+  --cor-superficie-container: #eef0f7;
+  --cor-indicador: #e0e7ff;
+  --cor-no-indicador: #3730a3;
   font-family:
     'Inter',
     system-ui,
@@ -120,10 +123,18 @@ details summary {
   border-radius: 13px;
 }
 
-/* ---------- Estrutura ---------- */
+/* ---------- Estrutura ----------
+ * Celular/tablet: AppBar + NavigationBar + gaveta, no espírito do Material 3 padrão do Flutter.
+ * Desktop (≥1024px): topo com a marca e menu lateral fixo.
+ */
 .app {
   min-height: 100vh;
+  min-height: 100dvh;
   padding-bottom: calc(var(--altura-menu-inferior) + env(safe-area-inset-bottom, 0px));
+}
+
+body.sem-rolagem {
+  overflow: hidden;
 }
 
 .topo {
@@ -132,14 +143,42 @@ details summary {
   z-index: 20;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 0.75rem;
-  height: var(--altura-topo);
-  padding: 0 1rem;
-  background: rgba(255, 255, 255, 0.82);
-  backdrop-filter: saturate(180%) blur(12px);
-  -webkit-backdrop-filter: saturate(180%) blur(12px);
-  border-bottom: 1px solid var(--cor-borda);
+  gap: 0.25rem;
+  height: calc(var(--altura-topo) + env(safe-area-inset-top, 0px));
+  padding: env(safe-area-inset-top, 0px) 0.5rem 0 0.25rem;
+  background: var(--cor-fundo);
+  transition:
+    background var(--transicao),
+    box-shadow var(--transicao);
+}
+
+/* Material 3: a AppBar ganha cor de "surface container" quando o conteúdo rola por baixo. */
+.topo-rolado {
+  background: var(--cor-superficie-container);
+  box-shadow: 0 1px 0 rgba(15, 23, 42, 0.06);
+}
+
+.topo-lider {
+  width: 48px;
+  min-height: 48px;
+  border-radius: 50%;
+  color: var(--cor-texto);
+}
+
+.topo-marca {
+  display: none;
+}
+
+.topo-titulo {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 1.3rem;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  padding-left: 0.25rem;
 }
 
 .topo-usuario {
@@ -154,17 +193,35 @@ details summary {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 34px;
-  height: 34px;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: 0;
   border-radius: 50%;
-  background: var(--cor-primaria-clara);
-  color: var(--cor-primaria);
+  background: var(--cor-indicador);
+  color: var(--cor-no-indicador);
+  font: inherit;
   font-size: 0.8rem;
   font-weight: 700;
 }
 
+button.avatar {
+  cursor: pointer;
+}
+
+.avatar-grande {
+  width: 44px;
+  height: 44px;
+  font-size: 0.95rem;
+}
+
+.topo-identificacao,
+.topo .topo-sair,
+.topo-avatar {
+  display: none;
+}
+
 .topo-identificacao {
-  display: flex;
   flex-direction: column;
   min-width: 0;
   line-height: 1.2;
@@ -174,7 +231,7 @@ details summary {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  max-width: 40vw;
+  max-width: 260px;
   font-size: 0.9rem;
   font-weight: 600;
 }
@@ -184,6 +241,7 @@ details summary {
   color: var(--cor-texto-suave);
 }
 
+/* NavigationBar (barra inferior) */
 .menu {
   position: fixed;
   bottom: 0;
@@ -191,52 +249,209 @@ details summary {
   right: 0;
   z-index: 20;
   display: flex;
-  overflow-x: auto;
-  background: rgba(255, 255, 255, 0.92);
-  backdrop-filter: saturate(180%) blur(12px);
-  -webkit-backdrop-filter: saturate(180%) blur(12px);
-  border-top: 1px solid var(--cor-borda);
+  justify-content: center;
+  height: calc(var(--altura-menu-inferior) + env(safe-area-inset-bottom, 0px));
   padding: 0 0.25rem env(safe-area-inset-bottom, 0px);
-  scrollbar-width: none;
+  background: var(--cor-superficie-container);
+  box-shadow: 0 -1px 0 rgba(15, 23, 42, 0.05);
+  user-select: none;
 }
 
 .menu-item {
-  flex: 1 0 68px;
+  flex: 1 1 0;
+  max-width: 128px;
+  min-width: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 3px;
-  height: var(--altura-menu-inferior);
-  font-size: 0.7rem;
+  gap: 4px;
+  font-size: 0.75rem;
   font-weight: 500;
+  line-height: 1.2;
   color: var(--cor-texto-suave);
   text-decoration: none;
-  transition: color var(--transicao);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.menu-extra {
+  display: none;
+}
+
+.menu-icone {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 30px;
+  border-radius: 999px;
+  transition:
+    background 200ms ease,
+    color 200ms ease;
+}
+
+.menu-rotulo {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.menu-item:active .menu-icone {
+  background: rgba(15, 23, 42, 0.08);
 }
 
 .menu-item.active {
-  color: var(--cor-primaria);
+  color: var(--cor-texto);
   font-weight: 600;
 }
 
 .menu-item.active .menu-icone {
-  background: var(--cor-primaria-clara);
+  background: var(--cor-indicador);
+  color: var(--cor-no-indicador);
 }
 
-.menu-icone {
-  flex: none;
-  width: 44px;
-  height: 28px;
-  padding: 4px 12px;
+/* NavigationDrawer (gaveta) */
+.gaveta-fundo {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  background: rgba(15, 23, 42, 0.4);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 250ms ease;
+}
+
+.gaveta-fundo.aberta {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.gaveta {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 41;
+  display: flex;
+  flex-direction: column;
+  width: min(320px, 86vw);
+  padding: calc(env(safe-area-inset-top, 0px) + 0.75rem) 0.75rem
+    calc(env(safe-area-inset-bottom, 0px) + 0.75rem);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  background: var(--cor-superficie);
+  border-radius: 0 20px 20px 0;
+  box-shadow: var(--sombra-elevada);
+  transform: translateX(-105%);
+  visibility: hidden;
+  transition:
+    transform 280ms cubic-bezier(0.2, 0, 0, 1),
+    visibility 0s linear 280ms;
+}
+
+.gaveta.aberta {
+  transform: none;
+  visibility: visible;
+  transition: transform 280ms cubic-bezier(0.2, 0, 0, 1);
+}
+
+.gaveta-cabecalho {
+  display: grid;
+  gap: 1rem;
+  padding: 0.75rem 1rem 1rem;
+}
+
+.gaveta-conta {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem;
+  border-radius: 16px;
+  background: var(--cor-superficie-2);
+}
+
+.gaveta-nome {
+  font-weight: 600;
+}
+
+.gaveta-perfil {
+  font-size: 0.8rem;
+  color: var(--cor-texto-suave);
+}
+
+.gaveta-lista {
+  display: grid;
+  gap: 2px;
+}
+
+.gaveta-item {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  width: 100%;
+  min-height: 52px;
+  padding: 0 1.5rem 0 1rem;
+  border: 0;
   border-radius: 999px;
+  background: none;
+  color: #334155;
+  font: inherit;
+  font-size: 0.92rem;
+  font-weight: 500;
+  text-align: left;
+  text-decoration: none;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
   transition: background var(--transicao);
 }
 
+.gaveta-item:active {
+  background: rgba(15, 23, 42, 0.08);
+}
+
+.gaveta-item.active {
+  background: var(--cor-indicador);
+  color: var(--cor-no-indicador);
+  font-weight: 600;
+}
+
+.gaveta-rodape {
+  margin-top: auto;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--cor-borda);
+}
+
+.gaveta-rodape .gaveta-item {
+  color: var(--cor-alerta);
+}
+
 .conteudo {
-  padding: 1.25rem 1rem;
+  padding: 0.5rem 1rem 1.5rem;
   max-width: 1280px;
   margin: 0 auto;
+}
+
+/* Espaço para o FAB não cobrir o fim da lista. */
+.conteudo:has(.botao-fab) {
+  padding-bottom: 6rem;
+}
+
+.transicao-tela {
+  animation: entrar-tela 220ms cubic-bezier(0.2, 0, 0, 1);
+}
+
+@keyframes entrar-tela {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+
+@media (min-width: 600px) {
+  .conteudo {
+    padding: 1rem 1.5rem 2rem;
+  }
 }
 
 @media (min-width: 1024px) {
@@ -249,11 +464,35 @@ details summary {
 
   .topo {
     grid-column: 1 / -1;
+    justify-content: space-between;
+    height: var(--altura-topo);
     padding: 0 1.5rem;
+    background: rgba(255, 255, 255, 0.82);
+    backdrop-filter: saturate(180%) blur(12px);
+    -webkit-backdrop-filter: saturate(180%) blur(12px);
+    border-bottom: 1px solid var(--cor-borda);
+    box-shadow: none;
   }
 
-  .topo-nome {
-    max-width: 260px;
+  .topo .topo-lider,
+  .topo-titulo,
+  .topo-avatar-botao,
+  .gaveta,
+  .gaveta-fundo {
+    display: none;
+  }
+
+  .topo-marca,
+  .topo-avatar {
+    display: inline-flex;
+  }
+
+  .topo-identificacao {
+    display: flex;
+  }
+
+  .topo .topo-sair {
+    display: inline-flex;
   }
 
   .menu {
@@ -261,25 +500,30 @@ details summary {
     top: var(--altura-topo);
     align-self: start;
     flex-direction: column;
+    justify-content: flex-start;
     gap: 2px;
     height: calc(100vh - var(--altura-topo));
     background: transparent;
-    backdrop-filter: none;
-    -webkit-backdrop-filter: none;
-    border-top: 0;
+    box-shadow: none;
     border-right: 1px solid var(--cor-borda);
     padding: 1rem 0.75rem;
   }
 
-  .menu-item {
+  .menu-item,
+  .menu-extra {
+    display: flex;
     flex: 0 0 auto;
+    max-width: none;
     flex-direction: row;
     justify-content: flex-start;
     gap: 0.7rem;
-    height: auto;
     padding: 0.6rem 0.8rem;
     border-radius: var(--raio-pequeno);
     font-size: 0.92rem;
+    line-height: 1.5;
+    transition:
+      background var(--transicao),
+      color var(--transicao);
   }
 
   .menu-item:hover {
@@ -293,14 +537,13 @@ details summary {
     box-shadow: var(--sombra);
   }
 
-  .menu-item.active .menu-icone {
+  .menu-icone,
+  .menu-item.active .menu-icone,
+  .menu-item:active .menu-icone {
+    width: 22px;
+    height: 22px;
     background: none;
-  }
-
-  .menu-icone {
-    width: 20px;
-    height: 20px;
-    padding: 0;
+    color: inherit;
   }
 
   .conteudo {
@@ -391,7 +634,9 @@ textarea:focus-visible {
 
 .botao:focus-visible,
 .aba:focus-visible,
-.menu-item:focus-visible {
+.menu-item:focus-visible,
+.gaveta-item:focus-visible,
+.avatar:focus-visible {
   outline: none;
   box-shadow: var(--anel-foco);
 }
@@ -1050,7 +1295,13 @@ tr.linha-alerta:hover td {
 
 .grafico {
   width: 100%;
-  height: 320px;
+  height: 240px;
+}
+
+@media (min-width: 600px) {
+  .grafico {
+    height: 320px;
+  }
 }
 
 .grade-2 {
@@ -1099,4 +1350,271 @@ tr.linha-alerta:hover td {
 .grade-2 + .cartao,
 .cartao + .grade-2 {
   margin-top: 1rem;
+}
+
+/* ---------- Celular (Material 3) ----------
+ * Abaixo de 1024px o app se comporta como um aplicativo: título na AppBar, FAB para criar,
+ * botões em pílula, bottom sheet com alça e, até 599px, tabelas como lista de cartões.
+ */
+@media (max-width: 1023.98px) {
+  /* O título da tela vai para a AppBar; o h1 continua no documento para leitores de tela. */
+  .conteudo h1:not(.titulo-visivel) {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+
+  .cabecalho-pagina:not(:has(> :not(h1, .botao-fab))) {
+    margin: 0;
+  }
+
+  .cabecalho-pagina > div {
+    flex: 1 1 auto;
+  }
+
+  .filtros {
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 0.6rem;
+  }
+
+  .filtros label {
+    font-size: 0.78rem;
+  }
+
+  .so-desktop {
+    display: none;
+  }
+
+  .conteudo h1.titulo-visivel {
+    font-size: 1.35rem;
+  }
+
+  input,
+  select,
+  textarea {
+    font-size: 16px; /* evita o zoom automático do iOS ao focar */
+    min-height: 48px;
+  }
+
+  .botao {
+    border-radius: 999px;
+    min-height: 44px;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .botao-pequeno {
+    min-height: 36px;
+    padding: 0.3rem 0.9rem;
+  }
+
+  .botao-icone {
+    border-radius: 50%;
+  }
+
+  .botao-link {
+    border-radius: 999px;
+  }
+
+  .botao-fab {
+    position: fixed;
+    right: 1rem;
+    bottom: calc(var(--altura-menu-inferior) + env(safe-area-inset-bottom, 0px) + 1rem);
+    z-index: 15;
+    min-height: 56px;
+    padding: 0 1.25rem 0 1rem;
+    gap: 0.6rem;
+    border: 0;
+    border-radius: 16px;
+    background: var(--cor-indicador);
+    color: var(--cor-no-indicador);
+    font-size: 0.92rem;
+    box-shadow:
+      0 4px 8px 3px rgba(15, 23, 42, 0.12),
+      0 1px 3px rgba(15, 23, 42, 0.2);
+  }
+
+  .botao-fab:hover:not(:disabled) {
+    background: #c7d2fe;
+  }
+
+  .cartao {
+    border-radius: 16px;
+  }
+
+  .abas {
+    display: flex;
+    width: 100%;
+    border-radius: 999px;
+  }
+
+  .aba {
+    flex: 1;
+    border-radius: 999px;
+  }
+
+  /* Bottom sheet do Material 3: cantos de 28px e alça de arraste. */
+  .modal {
+    border-radius: 28px 28px 0 0;
+    padding-top: 0.75rem;
+  }
+
+  .modal::before {
+    content: '';
+    display: block;
+    width: 32px;
+    height: 4px;
+    margin: 0 auto 1rem;
+    border-radius: 2px;
+    background: var(--cor-borda-forte);
+  }
+
+  .paginacao {
+    justify-content: space-between;
+  }
+
+  .paginacao > span {
+    flex-basis: 100%;
+  }
+}
+
+/* Tabelas viram lista de cartões no celular (rótulos vindos de data-label, ver Layout). */
+@media (max-width: 599.98px) {
+  .tabela-rolagem table,
+  .tabela-rolagem tbody,
+  .tabela-rolagem tr,
+  .tabela-rolagem td {
+    display: block;
+  }
+
+  .tabela-rolagem thead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+  }
+
+  .cartao.tabela-rolagem {
+    background: none;
+    border: 0;
+    box-shadow: none;
+    overflow: visible;
+  }
+
+  .cartao.tabela-rolagem > :not(table) {
+    margin: 0.75rem 0 0;
+  }
+
+  .tabela-rolagem tbody {
+    display: grid;
+    gap: 0.6rem;
+  }
+
+  .tabela-rolagem tr {
+    padding: 0.35rem 1rem 0.5rem;
+    background: var(--cor-superficie);
+    border: 1px solid var(--cor-borda);
+    border-radius: 16px;
+    box-shadow: var(--sombra);
+  }
+
+  /* Rótulo flutua à esquerda e o valor (com qualquer conteúdo misto) alinha à direita. */
+  .tabela-rolagem td,
+  tbody tr:hover td {
+    display: flow-root;
+    min-width: 0 !important;
+    padding: 0.35rem 0;
+    font-size: 0.92rem;
+    border: 0;
+    background: none;
+    text-align: right;
+    overflow-wrap: anywhere;
+    white-space: normal !important;
+  }
+
+  .tabela-rolagem td::before {
+    content: attr(data-label);
+    float: left;
+    margin-right: 1rem;
+    font-size: 0.8rem;
+    font-weight: 500;
+    line-height: 1.75;
+    color: var(--cor-texto-suave);
+    text-align: left;
+  }
+
+  .tabela-rolagem td:first-child {
+    padding: 0.5rem 0 0.55rem;
+    margin-bottom: 0.25rem;
+    border-bottom: 1px solid var(--cor-borda);
+    font-size: 1rem;
+    font-weight: 600;
+    text-align: left;
+  }
+
+  .tabela-rolagem td:first-child::before,
+  .tabela-rolagem td[data-label='']::before {
+    display: none;
+  }
+
+  /* Coluna "#" como título do cartão: "Parada 3". */
+  .tabela-rolagem td:first-child[data-label='#']::before {
+    content: 'Parada ';
+    display: inline;
+    float: none;
+    margin: 0;
+    font: inherit;
+    color: inherit;
+  }
+
+  .tabela-rolagem td.acoes {
+    display: flex;
+    justify-content: flex-end;
+    padding-top: 0.5rem;
+  }
+
+  .tabela-rolagem td[data-label=''] .acoes,
+  .tabela-rolagem td[data-label=''] {
+    padding-top: 0.5rem;
+  }
+
+  .tabela-rolagem td[colspan] {
+    border: 0;
+    margin: 0;
+    font-weight: 400;
+    font-size: 0.92rem;
+  }
+
+  .tabela-rolagem td:empty {
+    display: none;
+  }
+
+  .tabela-rolagem tr.linha-alerta {
+    background: var(--cor-alerta-clara);
+    border-color: #fecaca;
+  }
+
+  .tabela-rolagem tr.linha-alerta td {
+    background: none;
+  }
+
+  .cronometro {
+    font-size: 2.2rem;
+  }
+
+  .indicadores {
+    gap: 0.6rem;
+  }
+
+  .indicador {
+    border-radius: 16px;
+    padding: 0.85rem 0.9rem;
+  }
+
+  .indicador-rotulo {
+    font-size: 0.68rem;
+  }
 }

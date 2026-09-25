@@ -75,7 +75,7 @@ export default function Hoje() {
   if (!r) {
     return (
       <section>
-        <h1>Roteiro de hoje</h1>
+        <h1 className="titulo-visivel">Roteiro de hoje</h1>
         <div className="cartao">
           <p>Você não tem roteiro para hoje. Fale com o seu gerente se isso estiver errado.</p>
         </div>
@@ -98,7 +98,7 @@ export default function Hoje() {
   return (
     <section>
       <div className="cabecalho-pagina">
-        <h1>Roteiro de {formatarData(r.data)}</h1>
+        <h1 className="titulo-visivel">Roteiro de {formatarData(r.data)}</h1>
         <SeloStatus status={r.status} />
       </div>
 

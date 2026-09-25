@@ -1,3 +1,4 @@
+import { Plus } from 'lucide-react';
 import { useState, type FormEvent } from 'react';
 import { useAtualizarUsuario, usuariosApi } from '../../api/cadastros.ts';
 import type { Perfil, Usuario } from '../../api/tipos.ts';
@@ -118,8 +119,13 @@ export default function Usuarios() {
     <section>
       <div className="cabecalho-pagina">
         <h1>Usuários e perfis</h1>
-        <button type="button" className="botao botao-primario" onClick={() => setEditando('novo')}>
-          + Novo administrador
+        <button
+          type="button"
+          className="botao botao-primario botao-fab"
+          onClick={() => setEditando('novo')}
+        >
+          <Plus size={20} aria-hidden="true" />
+          Novo administrador
         </button>
       </div>
       <div className="filtros">

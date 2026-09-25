@@ -1,3 +1,4 @@
+import { Plus } from 'lucide-react';
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router';
 import { motoristasApi } from '../../api/cadastros.ts';
@@ -30,8 +31,13 @@ export default function Roteiros() {
     <section>
       <div className="cabecalho-pagina">
         <h1>Roteiros</h1>
-        <button type="button" className="botao botao-primario" onClick={() => setNovo(true)}>
-          + Novo roteiro
+        <button
+          type="button"
+          className="botao botao-primario botao-fab"
+          onClick={() => setNovo(true)}
+        >
+          <Plus size={20} aria-hidden="true" />
+          Novo roteiro
         </button>
       </div>
       <div className="filtros">

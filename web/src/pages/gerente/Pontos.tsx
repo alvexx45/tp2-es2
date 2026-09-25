@@ -1,3 +1,4 @@
+import { Plus } from 'lucide-react';
 import { useState } from 'react';
 import { pontosApi } from '../../api/cadastros.ts';
 import type { Ponto } from '../../api/tipos.ts';
@@ -18,8 +19,13 @@ export default function Pontos() {
     <section>
       <div className="cabecalho-pagina">
         <h1>Pontos</h1>
-        <button type="button" className="botao botao-primario" onClick={() => setEditando('novo')}>
-          + Novo ponto
+        <button
+          type="button"
+          className="botao botao-primario botao-fab"
+          onClick={() => setEditando('novo')}
+        >
+          <Plus size={20} aria-hidden="true" />
+          Novo ponto
         </button>
       </div>
       <div className="filtros">

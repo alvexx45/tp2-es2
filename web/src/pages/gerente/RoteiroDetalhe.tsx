@@ -134,11 +134,12 @@ export default function RoteiroDetalhe() {
 
   return (
     <section>
-      <p>
+      {/* No celular a AppBar já mostra a seta de voltar. */}
+      <p className="so-desktop">
         <Link to="/roteiros">‹ Roteiros</Link>
       </p>
       <div className="cabecalho-pagina">
-        <h1>
+        <h1 className="titulo-visivel">
           {r.motorista.nome} · {formatarData(r.data)}
         </h1>
         <SeloStatus status={r.status} />

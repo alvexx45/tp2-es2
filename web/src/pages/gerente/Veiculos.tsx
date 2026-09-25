@@ -1,3 +1,4 @@
+import { Plus } from 'lucide-react';
 import { useState, type FormEvent } from 'react';
 import { veiculosApi } from '../../api/cadastros.ts';
 import type { TipoVeiculo, Veiculo } from '../../api/tipos.ts';
@@ -89,8 +90,13 @@ export default function Veiculos() {
     <section>
       <div className="cabecalho-pagina">
         <h1>Veículos</h1>
-        <button type="button" className="botao botao-primario" onClick={() => setEditando('novo')}>
-          + Novo veículo
+        <button
+          type="button"
+          className="botao botao-primario botao-fab"
+          onClick={() => setEditando('novo')}
+        >
+          <Plus size={20} aria-hidden="true" />
+          Novo veículo
         </button>
       </div>
       <MensagemErro erro={lista.error ?? inativar.error} />

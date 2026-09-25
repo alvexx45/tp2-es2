@@ -1,3 +1,4 @@
+import { Plus } from 'lucide-react';
 import { useState, type FormEvent } from 'react';
 import {
   gerentesApi,
@@ -140,8 +141,13 @@ export default function Motoristas() {
     <section>
       <div className="cabecalho-pagina">
         <h1>Motoristas</h1>
-        <button type="button" className="botao botao-primario" onClick={() => setEditando('novo')}>
-          + Novo motorista
+        <button
+          type="button"
+          className="botao botao-primario botao-fab"
+          onClick={() => setEditando('novo')}
+        >
+          <Plus size={20} aria-hidden="true" />
+          Novo motorista
         </button>
       </div>
       <div className="filtros">
