@@ -1,10 +1,11 @@
-/** Cores e tipografia dos gráficos (paleta de referência validada; série única + status crítico). */
+/** Cores e tipografia dos gráficos — paleta Tauko (verde escuro + âmbar). */
 export const TEMA = {
-  serie: '#4f46e5',
+  serie: '#0F6E56',
+  destaque: '#FAC775',
   critico: '#dc2626',
-  grade: '#eef0f4',
-  eixo: '#cbd5e1',
-  textoEixo: '#64748b',
+  grade: '#e4efec',
+  eixo: '#b8d0cb',
+  textoEixo: '#4a6b63',
   fonte: 12,
 };
 

@@ -1,36 +1,81 @@
 /* Mobile-first. Breakpoints: 600px (tablet) e 1024px (desktop) — Seção 10. */
+
+/* Basique Pro — fonte da marca Tauko */
+@font-face {
+  font-family: 'Basique Pro';
+  src: url('/fonts/basique-pro-thin.woff2') format('woff2');
+  font-weight: 100;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Basique Pro';
+  src: url('/fonts/basique-pro-light.woff2') format('woff2');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Basique Pro';
+  src: url('/fonts/basique-pro-regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Basique Pro';
+  src: url('/fonts/basique-pro-bold.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Basique Pro';
+  src: url('/fonts/basique-pro-black.woff2') format('woff2');
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+
 :root {
-  --cor-primaria: #4f46e5;
-  --cor-primaria-escura: #4338ca;
-  --cor-primaria-clara: #eef2ff;
-  --cor-destaque: #06b6d4;
+  /* Paleta Tauko: verde escuro (#0F6E56) + âmbar (#FAC775) */
+  --cor-primaria: #0F6E56;
+  --cor-primaria-escura: #0a5341;
+  --cor-primaria-clara: #e6f4f1;
+  --cor-destaque: #FAC775;
+  --cor-destaque-escura: #e8a93a;
+  --cor-destaque-clara: #fef9ec;
   --cor-sucesso: #059669;
   --cor-sucesso-clara: #ecfdf5;
   --cor-alerta: #dc2626;
   --cor-alerta-clara: #fef2f2;
-  --cor-aviso: #b45309;
-  --cor-aviso-clara: #fffbeb;
-  --cor-texto: #0f172a;
-  --cor-texto-suave: #64748b;
-  --cor-borda: #e2e8f0;
-  --cor-borda-forte: #cbd5e1;
-  --cor-fundo: #f6f7fb;
+  --cor-aviso: #c47f17;
+  --cor-aviso-clara: #fef9ec;
+  --cor-texto: #0f1f1c;
+  --cor-texto-suave: #4a6b63;
+  --cor-borda: #d4e4e0;
+  --cor-borda-forte: #b8d0cb;
+  --cor-fundo: #f4f9f8;
   --cor-superficie: #ffffff;
-  --cor-superficie-2: #f8fafc;
-  --gradiente-marca: linear-gradient(135deg, #6366f1 0%, #4f46e5 45%, #0891b2 100%);
+  --cor-superficie-2: #f0f7f5;
+  --gradiente-marca: linear-gradient(135deg, #0F6E56 0%, #0a5341 60%, #063d30 100%);
   --raio: 14px;
   --raio-pequeno: 10px;
-  --sombra: 0 1px 2px rgba(15, 23, 42, 0.04), 0 1px 3px rgba(15, 23, 42, 0.06);
-  --sombra-elevada: 0 10px 30px -10px rgba(15, 23, 42, 0.18), 0 4px 10px -6px rgba(15, 23, 42, 0.1);
-  --anel-foco: 0 0 0 4px rgba(79, 70, 229, 0.18);
+  --sombra: 0 1px 2px rgba(15, 50, 40, 0.05), 0 1px 3px rgba(15, 50, 40, 0.07);
+  --sombra-elevada: 0 10px 30px -10px rgba(15, 50, 40, 0.18), 0 4px 10px -6px rgba(15, 50, 40, 0.1);
+  --anel-foco: 0 0 0 4px rgba(15, 110, 86, 0.22);
   --transicao: 150ms ease;
   --altura-topo: 64px;
   --altura-menu-inferior: 68px;
-  --cor-superficie-container: #eef0f7;
-  --cor-indicador: #e0e7ff;
-  --cor-no-indicador: #3730a3;
+  --cor-superficie-container: #e8f3f0;
+  --cor-indicador: #d0ece6;
+  --cor-no-indicador: #0a5341;
   font-family:
-    'Inter',
+    'Basique Pro',
     system-ui,
     -apple-system,
     'Segoe UI',
@@ -95,29 +140,30 @@ details summary {
   display: inline-flex;
   align-items: center;
   gap: 0.55rem;
-  font-weight: 800;
   font-size: 1.15rem;
-  letter-spacing: -0.03em;
+  letter-spacing: -0.02em;
   color: var(--cor-texto);
 }
 
-.marca-simbolo {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
+.marca-simbolo-img {
+  display: block;
+  border-radius: 10px;
   width: 32px;
   height: 32px;
-  border-radius: 10px;
-  background: var(--gradiente-marca);
-  color: #fff;
-  box-shadow: 0 4px 12px -4px rgba(79, 70, 229, 0.6);
+  flex: none;
+}
+
+.marca-nome {
+  font-family: 'Basique Pro', system-ui, sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.03em;
 }
 
 .marca-grande {
   font-size: 1.6rem;
 }
 
-.marca-grande .marca-simbolo {
+.marca-grande .marca-simbolo-img {
   width: 42px;
   height: 42px;
   border-radius: 13px;
@@ -719,7 +765,7 @@ textarea:focus-visible {
   border-color: var(--cor-primaria);
   color: #fff;
   box-shadow:
-    0 1px 2px rgba(79, 70, 229, 0.3),
+    0 1px 2px rgba(15, 110, 86, 0.3),
     inset 0 1px 0 rgba(255, 255, 255, 0.12);
 }
 
@@ -1162,9 +1208,12 @@ tr.linha-alerta:hover td {
     color: #fff;
   }
 
-  .login-painel .marca-simbolo {
-    background: rgba(255, 255, 255, 0.18);
-    box-shadow: none;
+  .login-painel .marca-nome {
+    color: #fff;
+  }
+
+  .login-painel .marca-simbolo-img {
+    opacity: 0.95;
   }
 
   .login-painel-titulo {

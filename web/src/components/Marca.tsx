@@ -1,13 +1,17 @@
-import { Timer } from 'lucide-react';
-
-/** Logotipo do Tauko: símbolo + nome. */
+/** Logotipo do Tauko: ícone SVG + nome em Basique Pro Bold. */
 export function Marca({ grande = false }: { grande?: boolean }) {
+  const tamanho = grande ? 42 : 32;
   return (
     <span className={`marca ${grande ? 'marca-grande' : ''}`}>
-      <span className="marca-simbolo" aria-hidden="true">
-        <Timer size={grande ? 22 : 18} strokeWidth={2.4} />
-      </span>
-      Tauko
+      <img
+        src="/tauko.svg"
+        alt=""
+        aria-hidden="true"
+        width={tamanho}
+        height={tamanho}
+        className="marca-simbolo-img"
+      />
+      <span className="marca-nome">tauko</span>
     </span>
   );
 }
